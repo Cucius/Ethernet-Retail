@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
       include: [{ model: Product }],
     });
     res.status(200).json(categoryAll);
-  } catch {
+  } catch (err) {
     res.status(500).json(err);
   }
 });
@@ -24,21 +24,47 @@ router.get("/:id", async (req, res) => {
       include: [{ model: Product }],
     });
     res.status(200).json(categoryOne);
-  } catch {
+  } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   // create a new category
+  try {
+    const categoryNew = await Category.create(req.body);
+    res.status(200).json(categoryNew);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", async (req, res) => {
   // update a category by its `id` value
+  try {
+    const categoryUpdate = await Category.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).json(categoryUpdate);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
   // delete a category by its `id` value
+  try {
+    const categoryDelete = await Category.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).json(categoryDelete);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
